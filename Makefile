@@ -1,7 +1,5 @@
 install:
 	composer install
-
-genetate:
 	php artisan key:generate
 
 lint:
