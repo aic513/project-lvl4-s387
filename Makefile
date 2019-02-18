@@ -1,6 +1,5 @@
 install:
 	composer install
-	php artisan key:generate
 
 lint:
 	composer run-script phpcs -- --standard=PSR12 routes
