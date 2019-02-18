@@ -1,6 +1,9 @@
 install:
 	composer install
 
+genetate:
+	php artisan key:generate
+
 lint:
 	composer run-script phpcs -- --standard=PSR12 routes
 
@@ -12,9 +15,6 @@ test:
 
 run:
 	php -S localhost:8000 -t public
-
-genetate:
-	php artisan key:generate
 
 dumpautoload:
 	composer dump-autoload --optimize
