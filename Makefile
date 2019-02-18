@@ -13,5 +13,8 @@ test:
 run:
 	php -S localhost:8000 -t public
 
+genetate:
+	php artisan key:generate
+
 dumpautoload:
 	composer dump-autoload --optimize

@@ -7,7 +7,6 @@ install:
   - make install
 
 laravel:
-  - php artisan key:generate
-  - php artisan config:cache
+  - make generate
 
 script: make lint test
