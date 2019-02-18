@@ -6,4 +6,8 @@ install:
   - composer self-update
   - make install
 
+laravel:
+  - php artisan key:generate
+  - php artisan config:cache
+
 script: make lint test
