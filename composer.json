@@ -1,26 +1,38 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The Laravel Task Manager - hexlet project",
     "keywords": [
         "framework",
-        "laravel"
+        "laravel",
+        "hexlet",
+        "task manager"
     ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "aic513",
+            "email": "aic513@mail.ru"
+        }
+    ],
     "require": {
-        "php": "^7.1.3",
+        "php": ">=7.1.3",
         "barryvdh/laravel-ide-helper": "^2.5",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "rollbar/rollbar": "~1.5",
+        "rollbar/rollbar-laravel": "^4.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
+        "symfony/var-dumper": "^4.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -58,6 +70,10 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
+        "phpunit": "phpunit",
+        "test": "phpunit tests"
     }
 }

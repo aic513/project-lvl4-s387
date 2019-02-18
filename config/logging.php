@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['rollbar','daily'],
         ],
 
         'single' => [
@@ -88,6 +88,14 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+
+        'rollbar' => [
+            'driver' => 'monolog',
+            'handler' => \Rollbar\Laravel\MonologHandler::class,
+            'access_token' => env('ROLLBAR_TOKEN'),
+            'level' => 'error',
+        ]
+
     ],
 
 ];
