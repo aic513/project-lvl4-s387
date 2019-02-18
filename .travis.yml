@@ -6,7 +6,4 @@ install:
   - composer self-update
   - make install
 
-laravel:
-  - make generate
-
 script: make lint test
