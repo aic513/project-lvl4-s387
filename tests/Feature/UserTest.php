@@ -1,21 +1,27 @@
 <?php
+
 namespace Tests\Feature;
+
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
+
 class UserTest extends TestCase
 {
+    use RefreshDatabase;
 
-    public function testUserIndex():void
+    public function testGetUserLoginForm()
     {
-        $user = factory(\App\User::class)->make();
-        $response = $this->actingAs($user)->get('/users');
-        $response->assertStatus(200);
+        $response = $this->get(route('login'));
+        $response->assertOk();
     }
 
 
-    public function testUserDelete():void
+    public function testGetUserRegistrationForm()
     {
-        $user = factory(\App\User::class)->make();
-        $this->actingAs($user)->delete('/user/show');
-        $this->assertDatabaseMissing('users', $user->toArray());
+        $response = $this->get(route('register'));
+        $response->assertOk();
     }
+
 }
