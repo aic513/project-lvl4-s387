@@ -6,8 +6,4 @@ install:
   - composer self-update
   - make install
 
-before_script:
-  - touch .env
-  - php artisan key:generate
-
 script: make lint test
