@@ -41,4 +41,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0cef593dec09ad7bd3a0/test_coverage)](https://codeclimate.com/github/aic513/project-lvl4-s387/test_coverage)
 
-https://stormy-hollows-37068.herokuapp.com/
+https://task-manager-laravel.herokuapp.com/
