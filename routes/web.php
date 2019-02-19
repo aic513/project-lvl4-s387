@@ -22,4 +22,3 @@ Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/user/show', 'UserController@show')->name('user.show');
 Route::patch('/user/show', 'UserController@update')->name('user.save');
 Route::delete('user/show', 'UserController@destroy')->name('user.delete');
-
