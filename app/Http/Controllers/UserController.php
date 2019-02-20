@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Contracts\Validation\Rule;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class UserController extends Controller
@@ -35,9 +36,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
         $user = Auth::user();
+        if ($user->id !== User::find($id)->id) {
+            redirect()->route('users.show', ['id' => $user->id]);
+        }
 
         return view('users.show', ['user' => $user]);
     }
@@ -60,19 +64,48 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
         flash('User info is updated successful')->success();
-        return redirect()->route('user.show');
+
+        return redirect()->route('users.show', ['id' => $user->id]);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param $id
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Exception
      */
-    public function destroy()
+    public function destroy($id)
     {
-        $user = Auth::user();
+        $user = User::find($id);
         $user->delete();
-        flash('Your account was deleted successful')->error();
+        flash('Your account deleted successful')->error();
+
         return redirect('/');
+    }
+
+    public function changePasswordShow()
+    {
+        return view('users.password');
+    }
+
+    public function changePasswordStore(Request $request)
+    {
+        $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|string|min:6|different:current-password|confirmed',
+        ]);
+        $user = Auth::user();
+        if (!Hash::check($request->get('current-password'), $user->password)) {
+            flash('The password is incorrect')->error();
+
+            return redirect()->back();
+        }
+
+        $user->password = bcrypt($request->get('new-password'));
+        $user->save();
+        flash('Password changed successfully !')->success();
+
+        return redirect()->route('users.show', ['id' => $user->id]);
     }
 }

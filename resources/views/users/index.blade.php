@@ -6,11 +6,24 @@
             <div class="col-md-8">
                 <H4 class="text-lg-center">Users</H4>
                 @csrf
-                <ul class="list-group">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     @foreach ($users as $user)
-                        <li class="list-group-item"> &#8226; {{ $user->name }}</li>
+                        <tr>
+                            <th scope="row">{{{$user->id}}}</th>
+                            <td>{{{$user->name}}}</td>
+                            <td>{{{$user->email}}}</td>
+                        </tr>
                     @endforeach
-                </ul>
+                    </tbody>
+                </table>
                 <div style="margin-top: 15px" class="d-flex justify-content-center">
                     {{ $users->links() }}
                 </div>

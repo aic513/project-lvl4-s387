@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpKernel\Tests\Fragment\RoutableFragmentRendererTest;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,7 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/users', 'UserController@index')->name('users.index');
-Route::get('/user/show', 'UserController@show')->name('user.show');
-Route::patch('/user/show', 'UserController@update')->name('user.save');
-Route::delete('user/show', 'UserController@destroy')->name('user.delete');
+Route::resource('users', 'UserController');
+
+Route::get('user/change-password', 'UserController@changePasswordShow')->name('user.changePassword');
+Route::patch('user/change-password', 'UserController@changePasswordStore')->name('user.storePassword');

@@ -6,10 +6,9 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">User settings</div>
-
                     <div class="card-body">
                         @include('flash::message')
-                        <form action="{{ route('user.save') }}" method="POST">
+                        <form action="{{ route('users.update', ['id' => $user->id]) }}" method="POST">
                             {{ method_field('PATCH') }}
                             @csrf
                             <div class="form-group row">
@@ -41,41 +40,18 @@
                                     @endif
                                 </div>
                             </div>
-                            {{--<div><a href="#">Change password</a></div>--}}
                             <div>
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </form>
                         <hr>
-                        <form action="/user/show" method="post">
-                        {{ method_field('DELETE') }}
-                        @csrf
-                        <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
+                        <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST" data-confirm="Are you sure, that you you want to delete your account?">
+                            {{ method_field('DELETE') }}
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
                                 Delete account
                             </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure, that you want to delete user <b>{{{$user->name}}}</b>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-primary">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="btn btn-primary" href="{{ route('user.changePassword')}}">Change password</a>
                         </form>
                     </div>
                 </div>
