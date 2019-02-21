@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": ">=7.1.3",
+        "doctrine/dbal": "^2.9",
         "barryvdh/laravel-ide-helper": "^2.5",
         "fideloper/proxy": "^4.0",
         "laracasts/flash": "^3.0",
