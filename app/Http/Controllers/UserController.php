@@ -63,7 +63,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
-        flash('User info is updated successful')->success();
+        flash('User info is updated successful')->success()->important();
 
         return redirect()->route('users.show', ['id' => $user->id]);
     }
