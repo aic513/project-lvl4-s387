@@ -20,6 +20,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('users', 'UserController');
+Route::resource('taskStatus', 'TaskStatusController');
+Route::resource('task', 'TaskController');
 
 Route::get('user/change-password', 'UserController@changePasswordShow')->name('user.changePassword');
 Route::patch('user/change-password', 'UserController@changePasswordStore')->name('user.storePassword');
