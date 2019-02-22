@@ -55,7 +55,9 @@ class TaskStatusController extends Controller
      */
     public function show($id)
     {
-        //
+        $status = TaskStatus::findOrFail($id);
+
+        return view('statuses.show', ['status' => $status]);
     }
 
     /**
@@ -80,7 +82,16 @@ class TaskStatusController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $status = TaskStatus::find($id);
+        $status->name = $request->name;
+        $status->save();
+        flash('Status info is updated successful')->success()->important();
+
+        return redirect()->route('taskStatus.show', ['id' => $status->id]);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\TaskStatus;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase;
@@ -36,5 +37,14 @@ class TaskStatusTest extends TestCase
         $url = route('taskStatus.index');
         $response = $this->actingAs($this->user)->get($url);
         $response->assertStatus(200);
+    }
+
+    public function testUpdateTaskStatus()
+    {
+        $status = factory(TaskStatus::class)->create(['name' => 'notEditedStatus']);
+        $url = route('taskStatus.update', ['id' => $status->id]);
+        $response = $this->actingAs($this->user)->patch($url, ['name' => 'editedStatus']);
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('task_statuses', ['name' => 'editedStatus']);
     }
 }
