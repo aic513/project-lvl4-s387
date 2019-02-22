@@ -19,9 +19,12 @@ class CreateTaskStatusesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
-        $task = new TaskStatus();
-        $task->name = 'New';
-        $task->save();
+        $importantStatuses = ['New', 'Work', 'Test', 'Finished'];
+        foreach ($importantStatuses as $status) {
+            $task = new TaskStatus();
+            $task->name = $status;
+            $task->save();
+        }
     }
 
     /**
