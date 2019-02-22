@@ -45,7 +45,7 @@
                             </div>
                         </form>
                         <hr>
-                        <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST" data-confirm="Are you sure, that you you want to delete your account?">
+                        <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST">
                             {{ method_field('DELETE') }}
                             @csrf
                             <button type="submit" class="btn btn-primary">

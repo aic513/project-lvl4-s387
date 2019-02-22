@@ -47,4 +47,13 @@ class TaskStatusTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseHas('task_statuses', ['name' => 'editedStatus']);
     }
+
+    public function testDestroy()
+    {
+        $status = factory(TaskStatus::class)->create(['name' => 'example']);
+        $url = route('taskStatus.destroy', ['id' => $status->id]);
+        $response = $this->actingAs($this->user)->delete($url);
+        $response->assertStatus(302);
+        $this->assertDatabaseMissing('task_statuses', $status->toArray());
+    }
 }

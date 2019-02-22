@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -31,7 +32,7 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
-        //
+        return view('statuses.create');
     }
 
     /**
@@ -43,7 +44,15 @@ class TaskStatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+        $status = new TaskStatus([
+            'name' => $request->name,
+        ]);
+        $status->save();
+
+        return redirect()->route('taskStatus.index')->with('success', 'Stock has been added');
     }
 
     /**
@@ -57,7 +66,7 @@ class TaskStatusController extends Controller
     {
         $status = TaskStatus::findOrFail($id);
 
-        return view('statuses.show', ['status' => $status]);
+        return view('statuses.form', ['status' => $status]);
     }
 
     /**
@@ -69,7 +78,9 @@ class TaskStatusController extends Controller
      */
     public function edit($id)
     {
-        //
+        $status = TaskStatus::find($id);
+
+        return view('statuses.edit', compact('status'));
     }
 
     /**
@@ -89,20 +100,25 @@ class TaskStatusController extends Controller
         $status = TaskStatus::find($id);
         $status->name = $request->name;
         $status->save();
-        flash('Status info is updated successful')->success()->important();
+        flash('Status info is updated successfully')->success()->important();
 
-        return redirect()->route('taskStatus.show', ['id' => $status->id]);
+        return redirect()->route('taskStatus.edit', ['id' => $status->id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        //
+        $status = TaskStatus::find($id);
+        $status->delete();
+        flash('Task status - '.$status->name.' is deleted successfully')->warning()->important();
+
+        return redirect()->route('taskStatus.index');
     }
 }

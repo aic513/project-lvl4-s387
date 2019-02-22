@@ -11,7 +11,7 @@
                     <p class="lead text-center">On this page you can edit your status</p>
                     <div class="card-body">
                         @include('flash::message')
-                        <form action="{{ route('taskStatus.update', ['id' => $status->id]) }}" method="POST">
+                        <form action="{{ route('taskStatus.update', ['id' => $status->id]) }}" method="post">
                             {{ method_field('PATCH') }}
                             @csrf
                             <div class="form-group row">
@@ -20,7 +20,6 @@
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name"
                                            value="{{ $status->name }}" required>
-
                                     @if ($errors->has('name'))
                                         <span class="invalid-feedback">
                                         <strong>{{ $errors->first('name') }}</strong>
