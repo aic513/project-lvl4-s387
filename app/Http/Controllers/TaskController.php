@@ -6,6 +6,7 @@ use App\Tag;
 use App\Task;
 use App\TaskStatus;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -54,7 +55,22 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'creator_id' => 'required|integer',
+
+        ]);
+        $task = new Task();
+        $task->name =  $request->name;
+        $task->description = $request->description;
+        dd($task);
+        $task->status()->associate(TaskStatus::find($request->status));
+        $task->creator()->associate(Auth::user());
+        $task->assignedTo()->associate(User::find($request->assignedToId));
+        $task->save();
+
+        flash('Gooooood!!!!!!!')->success()->important();
+        return redirect()->route('task.index');
     }
 
     /**
