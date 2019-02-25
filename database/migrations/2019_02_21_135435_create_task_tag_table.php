@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTagTaskTable extends Migration
+class CreateTaskTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,13 @@ class CreateTagTaskTable extends Migration
     public function up()
     {
         Schema::create('tag_task', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('task_id');
-            $table->integer('tag_id');
+            $table->unsignedInteger('tag_id')->index();
+            $table->unsignedInteger('task_id')->index();
             $table->timestamps();
+
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->primary(['tag_id', 'task_id']);
         });
     }
 

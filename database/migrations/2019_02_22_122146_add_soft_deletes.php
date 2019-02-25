@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddSoftDeletes extends Migration
 {
-    protected const TABLES = ['users', 'task_statuses', 'tags', 'tasks'];
+    protected const TABLES = ['users', 'task_statuses', 'tasks'];
 
     /**
      * Run the migrations.

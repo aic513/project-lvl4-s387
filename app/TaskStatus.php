@@ -27,6 +27,6 @@ class TaskStatus extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name',
+        'name','is_editable'
     ];
 }

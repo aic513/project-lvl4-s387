@@ -14,7 +14,7 @@
                             </div>
                         @endif
                         @if(!empty(Auth::user()->name))
-                            {{{ Auth::user()->name }}}
+                           Hello {{{ Auth::user()->name }}}!
                         @else
                             OOPS! Something went wrong
                         @endif

@@ -14,7 +14,7 @@ class AddFieldIntoTaskStatusesTable extends Migration
     public function up()
     {
         Schema::table('task_statuses', function (Blueprint $table) {
-            $table->tinyInteger('is_editable')->after('name')->default(1);
+            $table->tinyInteger('is_editable')->after('name')->default(0);
         });
     }
 

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -45,14 +44,15 @@ class TaskStatusController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255|unique:task_statuses,name',
         ]);
         $status = new TaskStatus([
             'name' => $request->name,
+            'is_editable' => 1,
         ]);
         $status->save();
 
-        return redirect()->route('taskStatus.index')->with('success', 'Stock has been added');
+        return redirect()->route('taskStatus.index');
     }
 
     /**
@@ -95,7 +95,7 @@ class TaskStatusController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:task_statuses,name',
         ]);
         $status = TaskStatus::find($id);
         $status->name = $request->name;
@@ -117,7 +117,7 @@ class TaskStatusController extends Controller
     {
         $status = TaskStatus::find($id);
         $status->delete();
-        flash('Task status - '.$status->name.' is deleted successfully')->warning()->important();
+        flash('Task status - ' . $status->name . ' is deleted successfully')->warning()->important();
 
         return redirect()->route('taskStatus.index');
     }

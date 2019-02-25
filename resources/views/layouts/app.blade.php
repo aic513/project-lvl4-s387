@@ -15,7 +15,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -36,13 +37,14 @@
                 <!-- Left Side Of Navbar -->
                 @auth
                     <ul class="navbar-nav mr-auto">
-                        <li><a class="nav-link @yield('home')" href="{{ route('home') }}">Home</a></li>
-                        <li><a class="nav-link @yield('users')" href="{{ route('users.index') }}">Users</a></li>
-                        <li><a class="nav-link @yield('users')" href="{{ route('taskStatus.index') }}">Statuses</a></li>
+                        <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                        <li><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
+                        <li><a class="nav-link" href="{{ route('taskStatus.index') }}">Statuses</a></li>
+                        <li><a class="nav-link" href="{{ route('task.index') }}">Tasks</a></li>
                     </ul>
             @endauth
 
-                <!-- Right Side Of Navbar -->
+            <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest

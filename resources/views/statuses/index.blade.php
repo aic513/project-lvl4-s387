@@ -34,7 +34,6 @@
                                 @if ($status->is_editable == 0)
                                     <a href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>
                                 @else
-
                                     <form action="{{route('taskStatus.destroy',['id' =>$status->id])}}" method="POST">
                                         {{ method_field('DELETE') }}
                                         @csrf
@@ -55,7 +54,6 @@
             <div class="col-md-4">
                 <a href="{{route('taskStatus.create')}}" class="btn btn-success btn-lg">Create task status</a>
             </div>
-
         </div>
     </div>
 @endsection
