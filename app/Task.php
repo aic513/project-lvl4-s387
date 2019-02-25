@@ -23,16 +23,21 @@ class Task extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'creator_id');
+        return $this->belongsTo('App\User');
     }
 
     public function assignedTo()
     {
-        return $this->belongsTo(User::class, 'assignedTo');
+        return $this->belongsTo('App\User');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo('App\TaskStatus');
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany('App\Tag', 'tag_task', 'id', 'tag_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use App\Task;
 use App\TaskStatus;
 use App\User;
@@ -35,12 +36,13 @@ class TaskController extends Controller
     {
         $statuses = TaskStatus::all();
         $executors = User::all();
+        $tags = Tag::all();
 
-        return view('tasks.create',
-            [
-                'statuses' => $statuses,
-                'executors' => $executors,
-            ]);
+        return view('tasks.create', [
+            'statuses' => $statuses,
+            'executors' => $executors,
+            'tags' => $tags,
+        ]);
     }
 
     /**
@@ -51,18 +53,6 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
     {
         //
     }

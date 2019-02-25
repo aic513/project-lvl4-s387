@@ -56,20 +56,6 @@ class TaskStatusController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $status = TaskStatus::findOrFail($id);
-
-        return view('statuses.form', ['status' => $status]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id

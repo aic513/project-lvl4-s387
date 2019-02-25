@@ -23,9 +23,9 @@
                                 <th scope="row">{{{$task->id}}}</th>
                                 <td>{{{$task->name}}}</td>
                                 <td>{{{$task->description}}}</td>
-                                <td>{{{$task->status}}}</td>
-                                <td>{{{$task->creator}}}</td>
-                                <td>{{{$task->assignedTo}}}</td>
+                                <td>{{{$task->status->name}}}</td>
+                                <td>{{{$task->creator->name}}}</td>
+                                <td>{{{$task->assignedTo->name}}}</td>
                             </tr>
                         @endforeach
                         </tbody>

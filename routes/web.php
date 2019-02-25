@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpKernel\Tests\Fragment\RoutableFragmentRendererTest;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

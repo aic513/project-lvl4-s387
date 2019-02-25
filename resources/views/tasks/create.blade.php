@@ -52,30 +52,30 @@
                             <div class="form-group row">
                                 <label for="assignedTo" class="col-md-4 col-form-label text-md-right">Assigned To</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" name="status" id="status">
+                                    <select class="form-control" name="assignedTo" id="assignedTo">
                                         @foreach($executors as $executor)
                                             <option value="{{ $executor->id }}">{{ $executor->name }}</option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('name'))
+                                    @if ($errors->has('assignedTo'))
                                         <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('assignedTo') }}</strong>
                                     </span>
                                     @endif
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="assignedTo" class="col-md-4 col-form-label text-md-right">Tags</label>
+                                <label for="tags" class="col-md-4 col-form-label text-md-right">Tags</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" name="status" id="status">
-                                        @foreach($executors as $executor)
-                                            <option value="{{ $executor->id }}">{{ $executor->name }}</option>
+                                    <select multiple class="form-control" name="tags" id="tags">
+                                        @foreach($tags as $tag)
+                                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('name'))
+                                    @if ($errors->has('tags'))
                                         <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('tags') }}</strong>
                                     </span>
                                     @endif
                                 </div>

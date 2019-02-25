@@ -27,6 +27,12 @@ class TaskStatus extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name','is_editable'
+        'name',
+        'is_editable'
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany('App\Task', 'status_id');
+    }
 }
