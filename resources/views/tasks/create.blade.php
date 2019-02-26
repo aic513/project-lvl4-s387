@@ -12,6 +12,7 @@
                     <div class="card-body">
                         @include('flash::message')
                         <form action="{{ route('task.store') }}" method="post">
+                            {{ method_field('POST') }}
                             @csrf
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
