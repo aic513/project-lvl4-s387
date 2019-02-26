@@ -14,8 +14,8 @@ class CreateTaskTagTable extends Migration
     public function up()
     {
         Schema::create('tag_task', function (Blueprint $table) {
-            $table->unsignedInteger('tag_id')->index();
-            $table->unsignedInteger('task_id')->index();
+            $table->unsignedInteger('tag_id')->nullable()->index();
+            $table->unsignedInteger('task_id')->nullable()->index();
             $table->timestamps();
 
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');

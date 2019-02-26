@@ -13,6 +13,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Tags</th>
                         <th scope="col">Status</th>
                         <th scope="col">Creator</th>
                         <th scope="col">Assigned to</th>
@@ -25,6 +26,7 @@
                             <th scope="row">{{{$task->id}}}</th>
                             <td><a href="{{route('task.edit',$task->id)}}">{{{$task->name}}}</a></td>
                             <td>{{{$task->description}}}</td>
+                            <td>{{ $task->tags->pluck('name')->implode(', ') }}</td>
                             <td>{{{$task->status->name}}}</td>
                             <td>{{{$task->creator->name}}}</td>
                             <td>{{{$task->assignedTo->name}}}</td>

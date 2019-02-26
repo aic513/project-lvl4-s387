@@ -17,6 +17,33 @@ class TaskController extends Controller
     }
 
     /**
+     * @param $tagsStr
+     *
+     * @return mixed
+     */
+    private function getTagsIdsFromStr($tagsStr)
+    {
+        $tagNames = collect(explode(',', $tagsStr));
+        return $tagNames->map(function ($item, $key) {
+            return trim($item);
+        })->unique()->reject(function ($name) {
+            return empty($name);
+        })->map(function ($tagName, $key) {
+            return Tag::firstOrCreate(['name' => strtolower($tagName)])->id;
+        })->toArray();
+
+    }
+
+    private function getValidTagsStr($tags)
+    {
+        if (empty($tags)) {
+            return '';
+        }
+
+        return $tags;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -37,7 +64,7 @@ class TaskController extends Controller
     {
         $statuses = TaskStatus::all();
         $executors = User::all();
-        $tags = Tag::all();
+        $tags = Tag::all()->pluck('name')->implode(', ');
 
         return view('tasks.create', [
             'statuses' => $statuses,
@@ -58,12 +85,15 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
+        $tagsStr = $this->getValidTagsStr($request->tags);
+        $tagsIds = $this->getTagsIdsFromStr($tagsStr);
         $task = new Task();
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status()->associate(TaskStatus::find($request->status_id));
         $task->creator()->associate(Auth::user());
         $task->assignedTo()->associate(User::find($request->assigned_to_id));
+        $task->tags()->attach($tagsIds);
         $task->save();
 
         flash("Task # {$task->id} created successfully!")->success()->important();
@@ -104,10 +134,13 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
         $assignedUser = User::find($request->assigned_to_id);
+        $tagsStr = $this->getValidTagsStr($request->tags);
+        $tagsIds = $this->getTagsIdsFromStr($tagsStr);
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status()->associate(TaskStatus::find($request->status_id));
         $task->assignedTo()->associate($assignedUser);
+        $task->tags()->sync($tagsIds);
         $task->save();
         flash("Task # {$task->id} updated successfully!")->success()->important();
 
