@@ -63,7 +63,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
-        flash('User info is updated successful')->success()->important();
+        flash('User info is updated successfully!')->success()->important();
 
         return redirect()->route('users.show', ['id' => $user->id]);
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        flash('Your account deleted successful')->error();
+        flash('Your account deleted successfully!')->error();
 
         return redirect('/');
     }
@@ -103,7 +103,7 @@ class UserController extends Controller
 
         $user->password = bcrypt($request->get('new-password'));
         $user->save();
-        flash('Password changed successfully !')->success();
+        flash('Password changed successfully!')->success();
 
         return redirect()->route('users.show', ['id' => $user->id]);
     }

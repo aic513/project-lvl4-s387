@@ -16,17 +16,27 @@
                         <th scope="col">Status</th>
                         <th scope="col">Creator</th>
                         <th scope="col">Assigned to</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach ($tasks as $task)
                         <tr>
                             <th scope="row">{{{$task->id}}}</th>
-                            <td>{{{$task->name}}}</td>
+                            <td><a href="{{route('task.edit',$task->id)}}">{{{$task->name}}}</a></td>
                             <td>{{{$task->description}}}</td>
                             <td>{{{$task->status->name}}}</td>
                             <td>{{{$task->creator->name}}}</td>
                             <td>{{{$task->assignedTo->name}}}</td>
+                            <td>
+                                <form action="{{route('task.destroy',['id' =>$task->id])}}" method="POST">
+                                    {{ method_field('DELETE') }}
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -35,9 +45,8 @@
                     {{ $tasks->links() }}
                 </div>
             </div>
-
             <div class="col-md-4">
-                <a href="{{route('task.create')}}" class="btn btn-success btn-lg">Create task status</a>
+                <a href="{{route('task.create')}}" class="btn btn-success btn-lg">Create task</a>
             </div>
         </div>
     </div>

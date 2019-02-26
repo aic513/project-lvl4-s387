@@ -86,7 +86,7 @@ class TaskStatusController extends Controller
         $status = TaskStatus::find($id);
         $status->name = $request->name;
         $status->save();
-        flash('Status info is updated successfully')->success()->important();
+        flash('Status info updated successfully!')->success()->important();
 
         return redirect()->route('taskStatus.edit', ['id' => $status->id]);
     }
@@ -103,7 +103,7 @@ class TaskStatusController extends Controller
     {
         $status = TaskStatus::find($id);
         $status->delete();
-        flash('Task status - ' . $status->name . ' is deleted successfully')->warning()->important();
+        flash('Task status - ' . $status->name . ' deleted successfully!')->warning()->important();
 
         return redirect()->route('taskStatus.index');
     }

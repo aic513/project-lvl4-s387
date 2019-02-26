@@ -57,19 +57,17 @@ class TaskController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'creator_id' => 'required|integer',
-
         ]);
         $task = new Task();
-        $task->name =  $request->name;
+        $task->name = $request->name;
         $task->description = $request->description;
-        dd($task);
-        $task->status()->associate(TaskStatus::find($request->status));
+        $task->status()->associate(TaskStatus::find($request->status_id));
         $task->creator()->associate(Auth::user());
-        $task->assignedTo()->associate(User::find($request->assignedToId));
+        $task->assignedTo()->associate(User::find($request->assigned_to_id));
         $task->save();
 
-        flash('Gooooood!!!!!!!')->success()->important();
+        flash("Task # {$task->id} created successfully!")->success()->important();
+
         return redirect()->route('task.index');
     }
 
@@ -82,7 +80,12 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $statuses = TaskStatus::all();
+        $executors = User::all();
+        $tags = Tag::all();
+
+        return view('tasks.edit', compact('task', 'statuses', 'executors', 'tags'));
     }
 
     /**
@@ -95,18 +98,36 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $task = Task::findOrFail($id);
+        $assignedUser = User::find($request->assigned_to_id);
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->status()->associate(TaskStatus::find($request->status_id));
+        $task->assignedTo()->associate($assignedUser);
+        $task->save();
+        flash("Task # {$task->id} updated successfully!")->success()->important();
+
+        return redirect()->route('task.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+        $task->delete();
+        flash('Task - ' . $task->name . ' deleted successfully!')->warning()->important();
+
+        return redirect()->route('task.index');
     }
 }
