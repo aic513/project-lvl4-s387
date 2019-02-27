@@ -5,6 +5,53 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <H4 class="text-lg-center">Tasks</H4>
+                <form class="mb-2" action="{{ route('task.index') }}" method="GET">
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label>Status</label>
+                            <select class="custom-select" name="statusId">
+                                <option value="" {{ Request::get('statusId') ? '' : 'selected' }}>All</option>
+                                @foreach ($statuses as $status)
+                                    <option value="{{ $status->id }}" {{ Request::get('statusId') == $status->id ? 'selected' : '' }}>
+                                        {{ $status->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Assigned user</label>
+                            <select class="custom-select" name="assignedToId">
+                                <option value="" {{ Request::get('assignedToId') ? '' : 'selected' }}>All</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ Request::get('assignedToId') == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Tag</label>
+                            <select class="custom-select" name="tagId">
+                                <option value="" {{ Request::get('tagId') ? '' : 'selected' }}>All</option>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id }}" {{ Request::get('tagId') == $tag->id ? 'selected' : '' }}>{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-9">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="isMyTask" {{ Request::get('isMyTask') ? 'checked' : '' }}>
+                                <label class="form-check-label">Created by me</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 d-flex justify-content-around">
+                            <button type="submit" class="btn btn-outline-success">Search</button>
+                            <a class="btn btn-outline-success" href="{{ route('task.index') }}">Show all</a>
+                        </div>
+                    </div>
+                </form>
                 @csrf
                 @include('flash::message')
                 <table class="table table-hover">

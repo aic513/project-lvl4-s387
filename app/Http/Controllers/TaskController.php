@@ -8,6 +8,7 @@ use App\TaskStatus;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class TaskController extends Controller
 {
@@ -25,6 +26,7 @@ class TaskController extends Controller
             if (strlen($tagName) > 10) {
                 throw new \Exception(" Length of {$tagName} is too long. Max length is 15 characters");
             }
+
             return $tagName;
         })->unique()->reject(function ($name) {
             return empty($name);
@@ -45,9 +47,25 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::paginate(5);
+        $tasks = Task::with(['tags', 'creator', 'assignedTo'])
+            ->createdByAuthUser(Input::get('isMyTask'))
+            ->withStatus(Input::get('statusId'))
+            ->assignedToUser(Input::get('assignedToId'))
+            ->withTag(Input::get('tagId'))
+            ->paginate(10);
+        $users = User::has('AssignedTasks')->get();
+        $tags = Tag::has('tasks')->get();
+        $statuses = TaskStatus::has('tasks')->get();
+        if (empty($tasks)) {
+            flash('No records found')->warning()->important();
+        }
 
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.index', [
+            'tasks' => $tasks,
+            'users' => $users,
+            'tags' => $tags,
+            'statuses' => $statuses
+        ]);
     }
 
     /**
@@ -66,6 +84,7 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -78,6 +97,7 @@ class TaskController extends Controller
             $tagsIds = $this->getTagsIdsFromStr($tagsStr);
         } catch (\Exception $e) {
             flash($e->getMessage())->error()->important();
+
             return back();
         }
         $task = new Task();
@@ -133,7 +153,7 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->status()->associate(TaskStatus::find($request->status_id));
         $task->assignedTo()->associate($assignedUser);
-         $task->tags()->sync($tagsIds);
+        $task->tags()->sync($tagsIds);
         $task->save();
         flash("Task # {$task->id} updated successfully!")->success()->important();
 
