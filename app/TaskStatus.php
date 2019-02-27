@@ -25,6 +25,7 @@ class TaskStatus extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    public const NEW_STATUS_ID = 1;
 
     protected $fillable = [
         'name',

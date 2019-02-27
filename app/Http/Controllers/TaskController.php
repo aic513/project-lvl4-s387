@@ -16,31 +16,26 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * @param $tagsStr
-     *
-     * @return mixed
-     */
-    private function getTagsIdsFromStr($tagsStr)
+    private function getTagsIdsFromStr($tagsString)
     {
-        $tagNames = collect(explode(',', $tagsStr));
+        $tagNames = collect(explode(',', $tagsString));
+
         return $tagNames->map(function ($item, $key) {
-            return trim($item);
+            $tagName = trim($item);
+            if (strlen($tagName) > 10) {
+                throw new \Exception(" Length of {$tagName} is too long. Max length is 15 characters");
+            }
+            return $tagName;
         })->unique()->reject(function ($name) {
             return empty($name);
         })->map(function ($tagName, $key) {
             return Tag::firstOrCreate(['name' => strtolower($tagName)])->id;
         })->toArray();
-
     }
 
-    private function getValidTagsStr($tags)
+    private function getValidTagsString($tags)
     {
-        if (empty($tags)) {
-            return '';
-        }
-
-        return $tags;
+        return empty($tags) ? '' : $tags;
     }
 
     /**
@@ -62,22 +57,15 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $statuses = TaskStatus::all();
         $executors = User::all();
-        $tags = Tag::all()->pluck('name')->implode(', ');
 
-        return view('tasks.create', [
-            'statuses' => $statuses,
-            'executors' => $executors,
-            'tags' => $tags,
-        ]);
+        return view('tasks.create', compact('executors'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -85,16 +73,22 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        $tagsStr = $this->getValidTagsStr($request->tags);
-        $tagsIds = $this->getTagsIdsFromStr($tagsStr);
+        $tagsStr = $this->getValidTagsString($request->tags_string);
+        try {
+            $tagsIds = $this->getTagsIdsFromStr($tagsStr);
+        } catch (\Exception $e) {
+            flash($e->getMessage())->error()->important();
+            return back();
+        }
         $task = new Task();
         $task->name = $request->name;
         $task->description = $request->description;
-        $task->status()->associate(TaskStatus::find($request->status_id));
+        $task->status()->associate(TaskStatus::find(TaskStatus::NEW_STATUS_ID));
         $task->creator()->associate(Auth::user());
         $task->assignedTo()->associate(User::find($request->assigned_to_id));
-        $task->tags()->attach($tagsIds);
         $task->save();
+        $task = Task::find($task->id);
+        $task->tags()->attach($tagsIds);
 
         flash("Task # {$task->id} created successfully!")->success()->important();
 
@@ -113,9 +107,8 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $statuses = TaskStatus::all();
         $executors = User::all();
-        $tags = Tag::all();
 
-        return view('tasks.edit', compact('task', 'statuses', 'executors', 'tags'));
+        return view('tasks.edit', compact('task', 'statuses', 'executors'));
     }
 
     /**
@@ -134,13 +127,13 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
         $assignedUser = User::find($request->assigned_to_id);
-        $tagsStr = $this->getValidTagsStr($request->tags);
+        $tagsStr = $this->getValidTagsString($request->tags);
         $tagsIds = $this->getTagsIdsFromStr($tagsStr);
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status()->associate(TaskStatus::find($request->status_id));
         $task->assignedTo()->associate($assignedUser);
-        $task->tags()->sync($tagsIds);
+         $task->tags()->sync($tagsIds);
         $task->save();
         flash("Task # {$task->id} updated successfully!")->success()->important();
 
@@ -157,7 +150,8 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::find($id);
+        $task = Task::findOrFail($id);
+        $task->tags()->detach();
         $task->delete();
         flash('Task - ' . $task->name . ' deleted successfully!')->warning()->important();
 

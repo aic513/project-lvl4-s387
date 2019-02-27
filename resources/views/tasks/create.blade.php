@@ -17,7 +17,7 @@
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" required>
+                                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
                                     @if ($errors->has('name'))
                                         <span class="invalid-feedback">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -30,23 +30,7 @@
                                 <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
                                 <div class="col-md-6">
                                     <textarea id="description" class="form-control" name="description"
-                                              placeholder="Write description about your task" rows="10" cols="45"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="status_id" class="col-md-4 col-form-label text-md-right">Status</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="status_id" id="status_id">
-                                        @foreach($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('status_id'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('status_id') }}</strong>
-                                    </span>
-                                    @endif
+                                              placeholder="Write description about your task" rows="10" cols="45">{{ old('description') }}</textarea>
                                 </div>
                             </div>
 
@@ -69,10 +53,10 @@
                             <div class="form-group row">
                                 <label for="assigned_to_id" class="col-md-4 col-form-label text-md-right">Tags</label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="enter tags across ','" name="tags" value="{{ $tags }}">
+                                    <input type="text" class="form-control" placeholder="please enter tags devided by ','" name="tags_string"
+                                           value="{{ old('tags_string') }}">
                                 </div>
                             </div>
-
                             <div>
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
@@ -83,5 +67,3 @@
         </div>
     </div>
 @stop
-
-
