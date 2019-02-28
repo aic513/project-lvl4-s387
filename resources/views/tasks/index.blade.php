@@ -8,33 +8,33 @@
                 <form class="mb-2" action="{{ route('task.index') }}" method="GET">
                     <div class="form-row">
                         <div class="form-group col-md-5">
-                            <label>Status</label>
-                            <select class="custom-select" name="statusId">
-                                <option value="" {{ Request::get('statusId') ? '' : 'selected' }}>All</option>
+                            <label for="status_id">Status</label>
+                            <select id="status_id" class="custom-select" name="status_id">
+                                <option value="" {{ Request::get('status_id') ? '' : 'selected' }}>All</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}" {{ Request::get('statusId') == $status->id ? 'selected' : '' }}>
+                                    <option value="{{ $status->id }}" {{ Request::get('status_id') === $status->id ? 'selected' : '' }}>
                                         {{ $status->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-5">
-                            <label>Assigned user</label>
-                            <select class="custom-select" name="assignedToId">
-                                <option value="" {{ Request::get('assignedToId') ? '' : 'selected' }}>All</option>
+                            <label for="assigned_to_id">Assigned user</label>
+                            <select id="assigned_to_id" class="custom-select" name="assigned_to_id">
+                                <option value="" {{ Request::get('assigned_to_id') ? '' : 'selected' }}>All</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ Request::get('assignedToId') == $user->id ? 'selected' : '' }}>
+                                    <option value="{{ $user->id }}" {{ Request::get('assigned_to_id') == $user->id ? 'selected' : '' }}>
                                         {{ $user->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-2">
-                            <label>Tag</label>
-                            <select class="custom-select" name="tagId">
-                                <option value="" {{ Request::get('tagId') ? '' : 'selected' }}>All</option>
+                            <label for="tag_id">Tag</label>
+                            <select id="tag_id" class="custom-select" name="tag_id">
+                                <option value="" {{ Request::get('tag_id') ? '' : 'selected' }}>All</option>
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->id }}" {{ Request::get('tagId') == $tag->id ? 'selected' : '' }}>{{ $tag->name }}</option>
+                                    <option value="{{ $tag->id }}" {{ Request::get('tag_id') === $tag->id ? 'selected' : '' }}>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -42,8 +42,8 @@
                     <div class="form-row">
                         <div class="form-group col-md-9">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="isMyTask" {{ Request::get('isMyTask') ? 'checked' : '' }}>
-                                <label class="form-check-label">Created by me</label>
+                                <input id=is_my_task" class="form-check-input" type="checkbox" name="is_my_task" {{ Request::get('is_my_task') ? 'checked' : '' }}>
+                                <label for="is_my_task" class="form-check-label">Created by me</label>
                             </div>
                         </div>
                         <div class="form-group col-md-3 d-flex justify-content-around">
@@ -69,14 +69,15 @@
                     </thead>
                     <tbody>
                     @foreach ($tasks as $task)
+
                         <tr>
                             <th scope="row">{{{$task->id}}}</th>
                             <td><a href="{{route('task.edit',$task->id)}}">{{{$task->name}}}</a></td>
                             <td>{{{$task->description}}}</td>
                             <td>{{ $task->tags->pluck('name')->implode(', ') }}</td>
                             <td>{{{$task->status->name}}}</td>
-                            <td>{{{$task->creator->name}}}</td>
-                            <td>{{{$task->assignedTo->name}}}</td>
+                            <td>{{{$task->creator?$task->creator->name:' deleted '}}}</td>
+                            <td>{{{$task->assignedTo?$task->assignedTo->name:' deleted '}}}</td>
                             <td>
                                 <form action="{{route('task.destroy',['id' =>$task->id])}}" method="POST">
                                     {{ method_field('DELETE') }}

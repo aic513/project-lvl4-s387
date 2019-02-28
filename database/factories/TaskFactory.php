@@ -1,18 +1,22 @@
 <?php
 
+use App\Task;
+use App\TaskStatus;
 use App\User;
 use Faker\Generator as Faker;
 
-$factory->define(\App\Task::class, function (Faker $faker) {
+$factory->define(Task::class, function (Faker $faker) {
     return [
-        'name' => 'task name',
-        'description' => 'descr',
-        'status_id' => 1,
+        'name' => $faker->word,
+        'description' => $faker->paragraph,
+        'status_id' => function () {
+            return factory(TaskStatus::class)->create()->id;
+        },
         'creator_id' => function () {
-            return factory(\App\User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
         'assigned_to_id' => function () {
-            return factory(\App\User::class)->create()->id;
+            return factory(User::class)->create()->id;
         }
     ];
 });

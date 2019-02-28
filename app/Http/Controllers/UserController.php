@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,34 +40,35 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = Auth::user();
-        if ($user->id !== User::find($id)->id) {
-            redirect()->route('users.show', ['id' => $user->id]);
+        if (auth()->user()->id !== User::find($id)->id) {
+            redirect()->route('users.show', ['id' => auth()->user()->id]);
         }
 
-        return view('users.show', ['user' => $user]);
+        return view('users.show', ['user' => auth()->user()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  UserRequest $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UserRequest $request)
     {
-        $user = Auth::user();
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255']
+        $updated = auth()->user()->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
         ]);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+
+        if (!$updated) {
+            flash('Your input data is invalid!')->error()->important();
+
+            return back();
+        }
         flash('User info is updated successfully!')->success()->important();
 
-        return redirect()->route('users.show', ['id' => $user->id]);
+        return redirect()->route('users.show', ['id' => auth()->user()->id]);
     }
 
     /**
@@ -74,26 +77,32 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy()
     {
-        $user = User::find($id);
-        $user->delete();
+        auth()->user()->delete();
         flash('Your account deleted successfully!')->error();
 
         return redirect('/');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function changePasswordShow()
     {
         return view('users.password');
     }
 
-    public function changePasswordStore(Request $request)
+    /**
+     * @param \App\Http\Requests\PasswordRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function changePasswordStore(PasswordRequest $request)
     {
-        $request->validate([
-            'current-password' => 'required',
-            'new-password' => 'required|string|min:6|different:current-password|confirmed',
-        ]);
+
+        $request->validated();
+
         $user = Auth::user();
         if (!Hash::check($request->get('current-password'), $user->password)) {
             flash('The password is incorrect')->error();
@@ -103,7 +112,7 @@ class UserController extends Controller
 
         $user->password = bcrypt($request->get('new-password'));
         $user->save();
-        flash('Password changed successfully!')->success();
+        flash('Password changed successfully!')->success()->important();
 
         return redirect()->route('users.show', ['id' => $user->id]);
     }

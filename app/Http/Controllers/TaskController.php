@@ -48,10 +48,10 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::with(['tags', 'creator', 'assignedTo'])
-            ->createdByAuthUser(Input::get('isMyTask'))
-            ->withStatus(Input::get('statusId'))
-            ->assignedToUser(Input::get('assignedToId'))
-            ->withTag(Input::get('tagId'))
+            ->createdByAuthUser(Input::get('is_my_task'))
+            ->withStatus(Input::get('status_id'))
+            ->assignedToUser(Input::get('assigned_to_id'))
+            ->withTag(Input::get('tag_id'))
             ->paginate(10);
         $users = User::has('AssignedTasks')->get();
         $tags = Tag::has('tasks')->get();

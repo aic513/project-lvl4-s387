@@ -59,10 +59,11 @@
                                     <select class="form-control" name="assigned_to_id" id="assigned_to_id">
                                         @if($task->assignedTo)
                                             <option value="{{ $task->assignedTo->id }}" selected>{{ $task->assignedTo->name }}</option>
+                                        @else
+                                            {{'-'}}
                                         @endif
                                         @foreach($executors as $executor)
-                                            <option
-                                                value="{{ $executor->id }}" {{ $executor->id == $task->assignedTo->id ? 'selected' : '' }}>{{ $executor->name }}</option>
+                                            <option value="{{ $executor->id }}">{{ $executor->name }}</option>
                                         @endforeach
 
                                     </select>

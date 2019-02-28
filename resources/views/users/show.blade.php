@@ -41,17 +41,17 @@
                                 </div>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-success">Save</button>
                             </div>
                         </form>
                         <hr>
                         <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST">
                             {{ method_field('DELETE') }}
                             @csrf
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-danger">
                                 Delete account
                             </button>
-                            <a class="btn btn-primary" href="{{ route('user.changePassword')}}">Change password</a>
+                            <a class="btn btn-warning" href="{{ route('user.changePassword')}}">Change password</a>
                         </form>
                     </div>
                 </div>
