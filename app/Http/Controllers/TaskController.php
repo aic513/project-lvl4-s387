@@ -9,7 +9,6 @@ use App\TaskStatus;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class TaskController extends Controller
 {
@@ -67,7 +66,7 @@ class TaskController extends Controller
         ]);
         $tagsStr = TaskService::getValidTagString($request->tags_string);
         try {
-            $tagsIds = TaskService::getValidTagString($tagsStr);
+            $tagsIds = TaskService::getTagsIdsFromStr($tagsStr);
         } catch (\Exception $e) {
             flash($e->getMessage())->error()->important();
 
