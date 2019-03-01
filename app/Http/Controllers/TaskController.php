@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TaskService;
 use App\Tag;
 use App\Task;
 use App\TaskStatus;
@@ -17,29 +18,6 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    private function getTagsIdsFromStr($tagsString)
-    {
-        $tagNames = collect(explode(',', $tagsString));
-
-        return $tagNames->map(function ($item, $key) {
-            $tagName = trim($item);
-            if (strlen($tagName) > 10) {
-                throw new \Exception(" Length of {$tagName} is too long. Max length is 15 characters");
-            }
-
-            return $tagName;
-        })->unique()->reject(function ($name) {
-            return empty($name);
-        })->map(function ($tagName, $key) {
-            return Tag::firstOrCreate(['name' => strtolower($tagName)])->id;
-        })->toArray();
-    }
-
-    private function getValidTagsString($tags)
-    {
-        return empty($tags) ? '' : $tags;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -47,12 +25,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with(['tags', 'creator', 'assignedTo'])
-            ->createdByAuthUser(Input::get('is_my_task'))
-            ->withStatus(Input::get('status_id'))
-            ->assignedToUser(Input::get('assigned_to_id'))
-            ->withTag(Input::get('tag_id'))
-            ->paginate(10);
+        $tasks = TaskService::getListAndFilterTasks();
         $users = User::has('AssignedTasks')->get();
         $tags = Tag::has('tasks')->get();
         $statuses = TaskStatus::has('tasks')->get();
@@ -92,9 +65,9 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        $tagsStr = $this->getValidTagsString($request->tags_string);
+        $tagsStr = TaskService::getValidTagString($request->tags_string);
         try {
-            $tagsIds = $this->getTagsIdsFromStr($tagsStr);
+            $tagsIds = TaskService::getValidTagString($tagsStr);
         } catch (\Exception $e) {
             flash($e->getMessage())->error()->important();
 
@@ -147,8 +120,8 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
         $assignedUser = User::find($request->assigned_to_id);
-        $tagsStr = $this->getValidTagsString($request->tags);
-        $tagsIds = $this->getTagsIdsFromStr($tagsStr);
+        $tagsStr = TaskService::getValidTagString($request->tags);
+        $tagsIds = TaskService::getTagsIdsFromStr($tagsStr);
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status()->associate(TaskStatus::find($request->status_id));
