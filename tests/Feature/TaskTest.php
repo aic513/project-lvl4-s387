@@ -21,7 +21,7 @@ class TaskTest extends TestCase
     public function testIndex()
     {
         $user = factory(User::class)->make();
-        $url = route('task.index');
+        $url = route('tasks.index');
         $response = $this->actingAs($user)->get($url);
         $response->assertOk();
     }
@@ -29,7 +29,7 @@ class TaskTest extends TestCase
     public function testCreate()
     {
         $user = factory(User::class)->make();
-        $url = route('task.create');
+        $url = route('tasks.create');
         $response = $this->actingAs($user)->get($url);
         $response->assertOk();
     }
@@ -38,7 +38,7 @@ class TaskTest extends TestCase
     {
         $user = factory(User::class)->make();
         $tasks = factory(Task::class, 5)->create();
-        $url = route('task.edit', ['id' => $tasks->first()]);
+        $url = route('tasks.edit', ['id' => $tasks->first()]);
         $response = $this->actingAs($user)->get($url);
         $response->assertOk();
     }
@@ -46,7 +46,7 @@ class TaskTest extends TestCase
     public function testStore()
     {
         $user = factory(User::class)->create();
-        $url = route('task.store');
+        $url = route('tasks.store');
         $response = $this->actingAs($user)->post($url, [
             'name' => 'newTask',
             'status_id' => 1,
@@ -62,7 +62,7 @@ class TaskTest extends TestCase
         $user = factory(User::class)->create();
         $tasks = factory(Task::class, 10)->create();
         $task = $tasks->first();
-        $url = route('task.update', $task->id);
+        $url = route('tasks.update', $task->id);
         $response = $this->actingAs($user)->patch($url, [
             'name' => 'new task',
             'description' => 'updated',
@@ -81,7 +81,7 @@ class TaskTest extends TestCase
         $user = factory(User::class)->make();
         factory(Task::class, 3)->create();
         $task = Task::first();
-        $url = route('task.destroy', ['id' => $task->id]);
+        $url = route('tasks.destroy', ['id' => $task->id]);
         $response = $this->actingAs($user)->delete($url);
         $response->assertStatus(302);
         $this->assertCount(2, Task::all());
