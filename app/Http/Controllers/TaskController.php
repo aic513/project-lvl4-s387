@@ -84,7 +84,7 @@ class TaskController extends Controller
 
         flash("Task # {$task->id} created successfully!")->success()->important();
 
-        return redirect()->route('task.index');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -129,7 +129,7 @@ class TaskController extends Controller
         $task->save();
         flash("Task # {$task->id} updated successfully!")->success()->important();
 
-        return redirect()->route('task.index');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -147,6 +147,6 @@ class TaskController extends Controller
         $task->delete();
         flash('Task - ' . $task->name . ' deleted successfully!')->warning()->important();
 
-        return redirect()->route('task.index');
+        return redirect()->route('tasks.index');
     }
 }

@@ -11,7 +11,7 @@
                     <p class="lead text-center">On this page you can create your task</p>
                     <div class="card-body">
                         @include('flash::message')
-                        <form action="{{ route('task.store') }}" method="post">
+                        <form action="{{ route('tasks.store') }}" method="post">
                             {{ method_field('POST') }}
                             @csrf
                             <div class="form-group row">

@@ -34,7 +34,7 @@
                                 @if ($status->is_editable == 0)
                                     <a href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>
                                 @else
-                                    <form action="{{route('taskStatus.destroy',['id' =>$status->id])}}" method="POST">
+                                    <form action="{{route('taskStatus.destroy',['id' =>$status->id])}}" data-confirm="Are you sure you want to delete this task?" method="POST">
                                         {{ method_field('DELETE') }}
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-danger">

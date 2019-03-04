@@ -11,7 +11,7 @@
                     <p class="lead text-center">On this page you can edit your task</p>
                     <div class="card-body">
                         @include('flash::message')
-                        <form action="{{ route('task.update',$task->id) }}" method="post">
+                        <form action="{{ route('tasks.update',$task->id) }}" method="post">
                             @csrf
                             @method('PATCH')
                             <div class="form-group row">

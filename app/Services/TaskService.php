@@ -38,6 +38,6 @@ class TaskService
             ->withStatus(Input::get('status_id'))
             ->assignedToUser(Input::get('assigned_to_id'))
             ->withTag(Input::get('tag_id'))
-            ->paginate(10);
+            ->paginate(5);
     }
 }

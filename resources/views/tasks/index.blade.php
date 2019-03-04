@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <H4 class="text-lg-center">Tasks</H4>
-                <form class="mb-2" action="{{ route('task.index') }}" method="GET">
+                <form class="mb-2" action="{{ route('tasks.index') }}" method="GET">
                     <div class="form-row">
                         <div class="form-group col-md-5">
                             <label for="status_id">Status</label>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group col-md-3 d-flex justify-content-around">
                             <button type="submit" class="btn btn-outline-success">Search</button>
-                            <a class="btn btn-outline-success" href="{{ route('task.index') }}">Show all</a>
+                            <a class="btn btn-outline-success" href="{{ route('tasks.index') }}">Show all</a>
                         </div>
                     </div>
                 </form>
@@ -72,14 +72,14 @@
 
                         <tr>
                             <th scope="row">{{{$task->id}}}</th>
-                            <td><a href="{{route('task.edit',$task->id)}}">{{{$task->name}}}</a></td>
+                            <td><a href="{{route('tasks.edit',$task->id)}}">{{{$task->name}}}</a></td>
                             <td>{{{$task->description}}}</td>
                             <td>{{ $task->tags->pluck('name')->implode(', ') }}</td>
                             <td>{{{$task->status->name}}}</td>
                             <td>{{{$task->creator?$task->creator->name:' deleted '}}}</td>
                             <td>{{{$task->assignedTo?$task->assignedTo->name:' deleted '}}}</td>
                             <td>
-                                <form action="{{route('task.destroy',['id' =>$task->id])}}" method="POST">
+                                <form action="{{route('tasks.destroy',['id' =>$task->id])}}" method="POST" data-confirm="Are you sure you want to delete this task?">
                                     {{ method_field('DELETE') }}
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-danger">
@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <a href="{{route('task.create')}}" class="btn btn-success btn-lg">Create task</a>
+                <a href="{{route('tasks.create')}}" class="btn btn-success btn-lg">Create task</a>
             </div>
         </div>
     </div>

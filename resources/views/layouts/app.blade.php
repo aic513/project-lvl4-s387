@@ -6,6 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-param" content="_token" />
 
     <title>Task Manager</title>
 
@@ -40,7 +41,7 @@
                         <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                         <li><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
                         <li><a class="nav-link" href="{{ route('taskStatus.index') }}">Statuses</a></li>
-                        <li><a class="nav-link" href="{{ route('task.index') }}">Tasks</a></li>
+                        <li><a class="nav-link" href="{{ route('tasks.index') }}">Tasks</a></li>
                     </ul>
             @endauth
 
